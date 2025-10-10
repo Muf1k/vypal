@@ -1,67 +1,32 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>F1</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Background Test</title>
   <style>
-    /* Make sure the page fills the viewport */
-    html, body {
-      height: 100%;
-      margin: 0;
-      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-    }
-
-    /* Background with overlay + fallback color */
     body {
-      /* Layer: dark rgba overlay on top of image for readable text */
-      background:
-        linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
-        url('assets/bg.jpg') center / cover no-repeat fixed;
-      background-color: #222; /* fallback if image fails */
-      color: #fff;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
-
-    .wrap {
-      min-height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      background-image: url('images/bg.png'); /* <-- your image path */
+      background-size: cover;    /* Fill the screen */
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      color: white;
+      font-family: Arial, sans-serif;
       text-align: center;
-      padding: 2rem;
-      box-sizing: border-box;
     }
 
     h1 {
-      font-size: clamp(1.6rem, 4vw, 3.2rem);
-      margin: 0;
-      text-shadow: 0 6px 18px rgba(0,0,0,0.6);
-    }
-
-    p {
-      opacity: 0.95;
-      margin-top: 0.6rem;
-    }
-
-    /* small responsive card so content is readable on narrow screens */
-    .card {
-      background: rgba(255,255,255,0.06);
-      padding: 1.2rem 1.6rem;
-      border-radius: 12px;
-      max-width: 800px;
-      width: 100%;
-      box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+      margin-top: 200px;
+      font-size: 3em;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
     }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="card">
-      <h1>It works — on GitHub Pages!</h1>
-      <p>Place your image at <code>/assets/bg.jpg</code>, commit, then enable Pages (see steps below).</p>
-    </div>
-  </div>
+  <h1>It Works 🎉</h1>
 </body>
 </html>
