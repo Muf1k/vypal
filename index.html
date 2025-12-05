@@ -1,215 +1,189 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live Stream</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stream Player</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        body {
-            font-family: 'Arial', sans-serif;
-            background-image: url('images/bg.png');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
+    body {
+      font-family: 'Arial', sans-serif;
+      background-image: url('images/bg.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
 
-        .container {
-            background: rgba(0, 0, 0, 0.8);
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            max-width: 1200px;
-            width: 100%;
-        }
+    .container {
+      background: rgba(0, 0, 0, 0.8);
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(10px);
+      max-width: 1200px;
+      width: 100%;
+    }
 
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
+    h1 {
+      color: white;
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 2.5rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    }
 
-        .title {
-            color: #ffffff;
-            font-size: 2.5rem;
-            font-weight: bold;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-        }
+    .video-container {
+      position: relative;
+      width: 100%;
+      height: 0;
+      padding-bottom: 56.25%; /* 16:9 aspect ratio */
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    }
 
-        .subtitle {
-            color: #cccccc;
-            font-size: 1.2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
+    .video-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+      border-radius: 10px;
+    }
 
-        .live-indicator {
-            width: 12px;
-            height: 12px;
-            background-color: #ff4444;
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
+    .loading {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      font-size: 1.2rem;
+      z-index: 1;
+    }
 
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.5; }
-            100% { opacity: 1; }
-        }
+    .controls {
+      margin-top: 20px;
+      text-align: center;
+    }
 
-        .stream-container {
-            position: relative;
-            width: 100%;
-            padding-bottom: 56.25%; /* 16:9 aspect ratio */
-            height: 0;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-        }
+    .refresh-btn {
+      background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
 
-        .stream-iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
+    .refresh-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    }
 
-        .controls {
-            margin-top: 20px;
-            text-align: center;
-        }
+    .refresh-btn:active {
+      transform: translateY(0);
+    }
 
-        .fullscreen-btn {
-            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 25px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-        }
+    @media (max-width: 768px) {
+      .container {
+        padding: 20px;
+        margin: 10px;
+      }
 
-        .fullscreen-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-        }
+      h1 {
+        font-size: 2rem;
+        margin-bottom: 20px;
+      }
 
-        .stream-info {
-            margin-top: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            padding: 15px;
-            color: #ffffff;
-            text-align: center;
-            backdrop-filter: blur(10px);
-        }
+      .refresh-btn {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+      }
+    }
 
-        .stream-info p {
-            margin: 5px 0;
-            font-size: 0.9rem;
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 20px;
-                margin: 10px;
-            }
-            
-            .title {
-                font-size: 2rem;
-            }
-            
-            .subtitle {
-                font-size: 1rem;
-            }
-        }
-    </style>
+    /* Fallback for when background image doesn't load */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      z-index: -2;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1 class="title">Live Stream</h1>
-            <div class="subtitle">
-                <div class="live-indicator"></div>
-                <span>Now Streaming</span>
-            </div>
-        </div>
-
-        <div class="stream-container">
-            <iframe 
-                id="streamIframe"
-                class="stream-iframe"
-                src="https://ihatestreams.xyz/embed/5eb26fd6-7b05-11f0-8a44-bc2411b21e0d"
-                allowfullscreen
-                allow="autoplay; encrypted-media">
-            </iframe>
-        </div>
-
-        <div class="controls">
-            <button class="fullscreen-btn" onclick="toggleFullscreen()">
-                📺 Fullscreen
-            </button>
-        </div>
-
-        <div class="stream-info">
-            <p><strong>Stream Status:</strong> 🔴 Live</p>
-            <p><strong>Quality:</strong> Auto HD</p>
-            <p><strong>Viewer:</strong> Web Player</p>
-        </div>
+  <div class="container">
+    <h1>🎬 Stream Player</h1>
+    <div class="video-container">
+      <div class="loading" id="loading">Loading stream...</div>
+      <iframe 
+        id="streamFrame"
+        src="https://ihatestreams.xyz/embed/5eb26fd6-7b05-11f0-8a44-bc2411b21e0d"
+        allowfullscreen
+        allow="autoplay; encrypted-media; picture-in-picture"
+        onload="hideLoading()">
+      </iframe>
     </div>
+    <div class="controls">
+      <button class="refresh-btn" onclick="refreshStream()">
+        🔄 Refresh Stream
+      </button>
+    </div>
+  </div>
 
-    <script>
-        function toggleFullscreen() {
-            const iframe = document.getElementById('streamIframe');
-            
-            if (!document.fullscreenElement) {
-                if (iframe.requestFullscreen) {
-                    iframe.requestFullscreen();
-                } else if (iframe.webkitRequestFullscreen) {
-                    iframe.webkitRequestFullscreen();
-                } else if (iframe.msRequestFullscreen) {
-                    iframe.msRequestFullscreen();
-                }
-            } else {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                } else if (document.webkitExitFullscreen) {
-                    document.webkitExitFullscreen();
-                } else if (document.msExitFullscreen) {
-                    document.msExitFullscreen();
-                }
-            }
-        }
+  <script>
+    function hideLoading() {
+      const loading = document.getElementById('loading');
+      if (loading) {
+        loading.style.display = 'none';
+      }
+    }
 
-        // Handle fullscreen change
-        document.addEventListener('fullscreenchange', updateFullscreenButton);
-        document.addEventListener('webkitfullscreenchange', updateFullscreenButton);
-        document.addEventListener('msfullscreenchange', updateFullscreenButton);
+    function refreshStream() {
+      const iframe = document.getElementById('streamFrame');
+      const loading = document.getElementById('loading');
+      
+      // Show loading indicator
+      loading.style.display = 'block';
+      
+      // Refresh the iframe
+      iframe.src = iframe.src;
+      
+      // Add a small delay to show the loading state
+      setTimeout(() => {
+        hideLoading();
+      }, 2000);
+    }
 
-        function updateFullscreenButton() {
-            const btn = document.querySelector('.fullscreen-btn');
-            if (document.fullscreenElement) {
-                btn.textContent = '🔙 Exit Fullscreen';
-            } else {
-                btn.textContent = '📺 Fullscreen';
-            }
-        }
-    </script>
+    // Hide loading after page loads
+    window.addEventListener('load', () => {
+      setTimeout(hideLoading, 1500);
+    });
+
+    // Handle iframe load errors
+    document.getElementById('streamFrame').addEventListener('error', () => {
+      const loading = document.getElementById('loading');
+      loading.textContent = 'Stream unavailable. Click refresh to try again.';
+      loading.style.color = '#ff6b6b';
+    });
+  </script>
 </body>
 </html>
