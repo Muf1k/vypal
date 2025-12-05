@@ -1,189 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Stream Player</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    <meta charset="UTF-8">
+    <title>Mufik's Living Room</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #0f0f0f, #1b1b1b);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+        }
 
-    body {
-      font-family: 'Arial', sans-serif;
-      background-image: "images/bg.png"
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-attachment: fixed;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-    }
+        .container {
+            width: 80%;
+            max-width: 900px;
+            background: rgba(255, 255, 255, 0.08);
+            padding: 20px;
+            border-radius: 12px;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+        }
 
-    .container {
-      background: rgba(0, 0, 0, 0.8);
-      border-radius: 15px;
-      padding: 30px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-      backdrop-filter: blur(10px);
-      max-width: 1200px;
-      width: 100%;
-    }
-
-    h1 {
-      color: white;
-      text-align: center;
-      margin-bottom: 30px;
-      font-size: 2.5rem;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-    }
-
-    .video-container {
-      position: relative;
-      width: 100%;
-      height: 0;
-      padding-bottom: 56.25%; /* 16:9 aspect ratio */
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-    }
-
-    .video-container iframe {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      border: none;
-      border-radius: 10px;
-    }
-
-    .loading {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: white;
-      font-size: 1.2rem;
-      z-index: 1;
-    }
-
-    .controls {
-      margin-top: 20px;
-      text-align: center;
-    }
-
-    .refresh-btn {
-      background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      border: none;
-      padding: 12px 24px;
-      border-radius: 25px;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    }
-
-    .refresh-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-    }
-
-    .refresh-btn:active {
-      transform: translateY(0);
-    }
-
-    @media (max-width: 768px) {
-      .container {
-        padding: 20px;
-        margin: 10px;
-      }
-
-      h1 {
-        font-size: 2rem;
-        margin-bottom: 20px;
-      }
-
-      .refresh-btn {
-        padding: 10px 20px;
-        font-size: 0.9rem;
-      }
-    }
-
-    /* Fallback for when background image doesn't load */
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      z-index: -2;
-    }
-  </style>
+        video {
+            width: 100%;
+            border-radius: 8px;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <h1>🎬 Stream Player</h1>
-    <div class="video-container">
-      <div class="loading" id="loading">Loading stream...</div>
-      <iframe 
-        id="streamFrame"
-        src="https://ihatestreams.xyz/embed/1a0edc01-8363-11f0-b385-bc2411b21e0d"
-        allowfullscreen
-        allow="autoplay; encrypted-media; picture-in-picture"
-        onload="hideLoading()">
-      </iframe>
+    <div class="container">
+        <video controls>
+            <source src="https://ihatestreams.xyz/embed/5eb26fd6-7b05-11f0-8a44-bc2411b21e0"
+            <source src="https://ihatestreams.xyz/embed/5eb26fd6-7b05-11f0-8a44-bc2411b21e0d"
+            -->
+            Your browser does not support the video tag.
+        </video>
     </div>
-    <div class="controls">
-      <button class="refresh-btn" onclick="refreshStream()">
-        🔄 Refresh Stream
-      </button>
-    </div>
-  </div>
-
-  <script>
-    function hideLoading() {
-      const loading = document.getElementById('loading');
-      if (loading) {
-        loading.style.display = 'none';
-      }
-    }
-
-    function refreshStream() {
-      const iframe = document.getElementById('streamFrame');
-      const loading = document.getElementById('loading');
-      
-      // Show loading indicator
-      loading.style.display = 'block';
-      
-      // Refresh the iframe
-      iframe.src = iframe.src;
-      
-      // Add a small delay to show the loading state
-      setTimeout(() => {
-        hideLoading();
-      }, 2000);
-    }
-
-    // Hide loading after page loads
-    window.addEventListener('load', () => {
-      setTimeout(hideLoading, 1500);
-    });
-
-    // Handle iframe load errors
-    document.getElementById('streamFrame').addEventListener('error', () => {
-      const loading = document.getElementById('loading');
-      loading.textContent = 'Stream unavailable. Click refresh to try again.';
-      loading.style.color = '#ff6b6b';
-    });
-  </script>
 </body>
 </html>
