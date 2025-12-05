@@ -1,1 +1,1 @@
-<iframe title="Live" width="100%" height="600" src="https://hakunamatata5.org/sky-main-event/clean.html" frameborder="0" allowfullscreen="" sandbox="allow-same-origin allow-scripts allow-popups"></iframe>
+<iframe title="Live" width="100%" height="600" src="https://ihatestreams.xyz/embed/5eb26fd6-7b05-11f0-8a44-bc2411b21e0d" frameborder="0" allowfullscreen="" sandbox="allow-same-origin allow-scripts allow-popups"></iframe>
