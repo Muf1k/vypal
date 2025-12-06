@@ -91,10 +91,32 @@
         .retry-btn:hover {
             background: #0056b3;
         }
+
+        .fullscreen-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 1001;
+            font-size: 14px;
+        }
+
+        .fullscreen-btn:hover {
+            background: rgba(0, 0, 0, 0.9);
+        }
     </style>
 </head>
 <body>
     <div class="container">
+        <button class="fullscreen-btn" onclick="toggleFullscreen()" id="fullscreenBtn">
+            ⛶ Fullscreen
+        </button>
+        
         <div class="loading" id="loading">
             <div class="spinner"></div>
             <p>Loading content...</p>
@@ -112,7 +134,10 @@
             class="content-frame" 
             src="https://hakunamatata5.org/sky-main-event/clean.html"
             onload="handleLoad()" 
-            onerror="handleError()">
+            onerror="handleError()"
+            allowfullscreen
+            webkitallowfullscreen
+            mozallowfullscreen>
         </iframe>
     </div>
 
@@ -140,6 +165,32 @@
         function openInNewTab() {
             window.open('https://hakunamatata5.org/sky-main-event/clean.html', '_blank');
         }
+
+        function toggleFullscreen() {
+            const iframe = document.getElementById('contentFrame');
+            
+            if (!document.fullscreenElement) {
+                if (iframe.requestFullscreen) {
+                    iframe.requestFullscreen();
+                } else if (iframe.webkitRequestFullscreen) {
+                    iframe.webkitRequestFullscreen();
+                }
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+
+        // Update fullscreen button text
+        document.addEventListener('fullscreenchange', function() {
+            const btn = document.getElementById('fullscreenBtn');
+            if (document.fullscreenElement) {
+                btn.innerHTML = '⛶ Exit Fullscreen';
+            } else {
+                btn.innerHTML = '⛶ Fullscreen';
+            }
+        });
 
         // Handle iframe load timeout
         setTimeout(() => {
